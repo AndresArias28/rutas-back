@@ -11,5 +11,5 @@ public interface  AdminService {
 
     List<AdminDTO> getAdmins();
 
-    AuthResponse registerAdmin(RegisterAdminRequest rq, Principal principal);
+//    AuthResponse registerAdmin(RegisterAdminRequest rq, Principal principal);
 }

@@ -1,5 +1,6 @@
 package com.gym.gym_ver2.infraestructure.jwt;
 
+import com.gym.gym_ver2.infraestructure.config.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -28,16 +29,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //atributos
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     //constructor
-    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService, CustomUserDetailsService customUserDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Override// se ejecuta en cada peticion
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-       // final String uri = request.getRequestURI();
         final String token = getTokenFromRequest(request);//obtener token
         final String userEmail;
 
@@ -52,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("Correo del token desde el filtro: " + userEmail);
             //validar token y correo
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(userEmail);
                 System.out.println("UserDetails cargado: " + userDetails.getUsername());
 
                 if (jwtService.validateToken(token, userDetails)) {
@@ -82,8 +84,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             return;
                         }
                     }
+                    System.out.println("userDetails.getUsername(): " + userDetails.getUsername());
+                    System.out.println("userDetails.getAuthorities(): " + userDetails.getAuthorities());
+
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, authorities);
+                            userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                     System.out.println("Autenticación establecida en el SecurityContextHolder");
                 }

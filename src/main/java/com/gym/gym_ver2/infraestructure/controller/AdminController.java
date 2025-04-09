@@ -40,24 +40,24 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/register")
-    @PreAuthorize("hasAnyAuthority('ROLE_Administrador', 'ROLE_Superusuario')")
-    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody RegisterAdminRequest rq, Principal principal) {
-        try{
-            if (rq == null) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            if (principal == null) {
-                throw new RuntimeException("Error: El usuario no está autenticado.");
-            }
-            return ResponseEntity.ok(adminService.registerAdmin(rq, principal));
-        }catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
-    }
+//    @PostMapping("/register")
+//    @PreAuthorize("hasAnyAuthority('ROLE_Administrador', 'ROLE_Superusuario')")
+//    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody RegisterAdminRequest rq, Principal principal) {
+//        try{
+//            if (rq == null) {
+//                return ResponseEntity.badRequest().build();
+//            }
+//
+//            if (principal == null) {
+//                throw new RuntimeException("Error: El usuario no está autenticado.");
+//            }
+//            return ResponseEntity.ok(adminService.registerAdmin(rq, principal));
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//
+//    }
 
 
 

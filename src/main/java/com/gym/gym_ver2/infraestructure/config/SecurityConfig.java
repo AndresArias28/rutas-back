@@ -35,9 +35,7 @@ import java.util.List;
 public class SecurityConfig { //obtener la cadena de filtros
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;
     private final CustomUserDetailsService userDetailsService;
-    private final UsuarioRepository userRepository;
 
     @Bean //configurar la cadena de filtros, se encarga de la seguridad
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -61,16 +59,13 @@ public class SecurityConfig { //obtener la cadena de filtros
                                     ).permitAll()
                                     .requestMatchers(HttpMethod.PUT).permitAll()
                                     .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                    //.requestMatchers(HttpMethod.GET).permitAll()
-                                    .requestMatchers("/user/obtenereUsarios").hasAnyAuthority("ROLE_Administrador", "ROLE_Superusuario")
-                                    .requestMatchers("/user/obtenereUsario/**").hasAnyAuthority("ROLE_Administrador", "ROLE_Superusuario")
                                     .anyRequest().authenticated()
                     )
                     //configurar la sesion para que sea sin estado
                     .sessionManagement(sessionManagement ->
                             sessionManagement
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .authenticationProvider(authenticationProvider)//configurar el proveedor de autenticacion
+                    .authenticationProvider(authenticationProvider())//configurar el proveedor de autenticacion
                     //configurar el filtro de autenticacion JWT antes del filtro estándar de Spring Security.
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
@@ -93,18 +88,21 @@ public class SecurityConfig { //obtener la cadena de filtros
         };
     }
 
-    @Bean // Configurar el AuthenticationManager para que use el UserDetailsService y el PasswordEncoder
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder()) // Configura el PasswordEncoder
-               .and()
-                .build();
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

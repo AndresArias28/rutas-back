@@ -29,9 +29,4 @@ public class PasswordResetToken {
     @Column(name = "fecha_expiracion")
     private LocalDateTime expiryDate;
 
-//    public PasswordResetToken(String token, Usuario usuario, LocalDateTime localDateTime) {
-//        this.token = token;
-//        this.usuario = usuario;
-//        this.expiryDate = expiryDate;
-//    }
 }

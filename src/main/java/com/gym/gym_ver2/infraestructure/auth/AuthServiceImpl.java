@@ -4,6 +4,7 @@ import com.gym.gym_ver2.aplicaction.service.PasswordResetService;
 import com.gym.gym_ver2.aplicaction.service.UsuarioService;
 import com.gym.gym_ver2.domain.model.entity.Rol;
 import com.gym.gym_ver2.domain.model.entity.Usuario;
+import com.gym.gym_ver2.infraestructure.config.CustomUserDetailsService;
 import com.gym.gym_ver2.infraestructure.jwt.JwtService;
 import com.gym.gym_ver2.infraestructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class AuthServiceImpl implements  AuthService {
     private final PasswordResetService passwordResetService;
     private final UsuarioService usuarioService;
     private final JavaMailSender mailSender;
+    private final UserDetailsService userDetailsService;
+    private  final CustomUserDetailsService customUserDetailsService;
 
     public AuthResponse login(LoginRequest rq) {
         // Validar que el email y la contraseña no estén vacíos
@@ -43,7 +47,9 @@ public class AuthServiceImpl implements  AuthService {
                     new UsernamePasswordAuthenticationToken(rq.getEmailUsuario(), rq.getContrasenaUsuario())
             );
             //recuperar el usuario de la BD
-            UserDetails userDetails = userRepository.findByEmailUsuario(rq.getEmailUsuario()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            System.out.println("Email del usuario: " + rq.getEmailUsuario());
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(rq.getEmailUsuario());
+            System.out.println("detalles del usuario: " + userDetails.getUsername());
             HashMap<String, Object> tokenExtraClaim = new HashMap<>(); //crear token con el usuario
             tokenExtraClaim.put("sub", rq.getEmailUsuario());//agregar el email del usuario al token
             String token = jwtService.generateToken(tokenExtraClaim, userDetails);

@@ -19,12 +19,11 @@ public class AdminServiceImpl implements  AdminService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
-    public AdminServiceImpl(UsuarioRepository usuarioRepository, RolRepository rolRepository, PasswordEncoder passwordEncoder) {
+    public AdminServiceImpl(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -42,24 +41,24 @@ public class AdminServiceImpl implements  AdminService {
                 .toList();
     }
 
-    @Override
-    public AuthResponse registerAdmin(RegisterAdminRequest rq, Principal principal) {
-        System.out.println("Accediendo al método protegido.");
-        Usuario usuarioActual = usuarioRepository.findByEmailUsuario(principal.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario autenticado no encontrado"));
-        System.out.println("Usuario autenticado: " + usuarioActual.getNombreUsuario());
-        Rol rol = rolRepository.findByNombreRol("Administrador")
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-        Usuario usuario = Usuario.builder()
-                .nombreUsuario(rq.getNombreAdmin())
-                .apellidoUsuario(rq.getApellidoAdmin())
-                .emailUsuario(rq.getEmailAdmin())
-                .cedulaUsuario(rq.getCedulaAdmin())
-                .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaAdmin()))
-                .idRol(Rol.builder().idRol(2).build())
-                .build();
-        usuarioRepository.save(usuario);
-        return AuthResponse.builder().token("Administrador registrado").build();
-    }
+//    @Override
+//    public AuthResponse registerAdmin(RegisterAdminRequest rq, Principal principal) {
+//        System.out.println("Accediendo al método protegido.");
+//        Usuario usuarioActual = usuarioRepository.findByEmailUsuario(principal.getName())
+//                .orElseThrow(() -> new RuntimeException("Usuario autenticado no encontrado"));
+//        System.out.println("Usuario autenticado: " + usuarioActual.getNombreUsuario());
+//        Rol rol = rolRepository.findByNombreRol("Administrador")
+//                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+//        Usuario usuario = Usuario.builder()
+//                .nombreUsuario(rq.getNombreAdmin())
+//                .apellidoUsuario(rq.getApellidoAdmin())
+//                .emailUsuario(rq.getEmailAdmin())
+//                .cedulaUsuario(rq.getCedulaAdmin())
+//                .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaAdmin()))
+//                .idRol(Rol.builder().idRol(2).build())
+//                .build();
+//        usuarioRepository.save(usuario);
+//        return AuthResponse.builder().token("Administrador registrado").build();
+//    }
 
 }
