@@ -9,9 +9,9 @@ public interface UsuarioService {
 
     List<UsuarioDTO> getUsers();
 
-    //void createUser(Usuario usuario);
 
-    UsuarioDTO getUser(Integer idUsuario);
+
+    UsuarioDTO getUser(Integer idPersona);
 
     UserResponse actualizarUsuario(UsuarioDTO userRequest);
 

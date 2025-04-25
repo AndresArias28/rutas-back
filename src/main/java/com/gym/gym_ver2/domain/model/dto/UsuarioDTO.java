@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @Getter
 public class UsuarioDTO {
-     private Integer idUsuario;
+     private Integer idPersona;
      private String nombreUsuario;
      private String emailUsuario;
      private Integer rol;

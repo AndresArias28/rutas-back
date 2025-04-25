@@ -2,10 +2,13 @@ package com.gym.gym_ver2.infraestructure.auth;
 //patrones utilizados: builder, singleton,  inyeccion de dependencias. fachada, observerr, Cadena de Responsabilidad
 import com.gym.gym_ver2.aplicaction.service.PasswordResetService;
 import com.gym.gym_ver2.aplicaction.service.UsuarioService;
+//import com.gym.gym_ver2.domain.model.entity.Aprendiz;
+import com.gym.gym_ver2.domain.model.entity.Persona;
 import com.gym.gym_ver2.domain.model.entity.Rol;
 import com.gym.gym_ver2.domain.model.entity.Usuario;
 import com.gym.gym_ver2.infraestructure.config.CustomUserDetailsService;
 import com.gym.gym_ver2.infraestructure.jwt.JwtService;
+import com.gym.gym_ver2.infraestructure.repository.PersonaRepository;
 import com.gym.gym_ver2.infraestructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,6 +28,7 @@ import java.util.UUID;
 public class AuthServiceImpl implements  AuthService {
 
     private final UsuarioRepository userRepository;
+    private final PersonaRepository personaRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -44,40 +48,47 @@ public class AuthServiceImpl implements  AuthService {
         }
         try {//patron Cadena de Responsabilidad
             authenticationManager.authenticate(// autentica que el usuario y la contraseña sean correctos
-                    new UsernamePasswordAuthenticationToken(rq.getEmailUsuario(), rq.getContrasenaUsuario())
+                    new UsernamePasswordAuthenticationToken(rq.getEmailUsuario(), rq.getContrasenaUsuario())//este metodo se encarga de validar el usuario y la contraseña si ya existen en la base de datos
             );
             //recuperar el usuario de la BD
             System.out.println("Email del usuario: " + rq.getEmailUsuario());
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(rq.getEmailUsuario());
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(rq.getEmailUsuario());//cargar el usuario de la base de datos
             System.out.println("detalles del usuario: " + userDetails.getUsername());
-            HashMap<String, Object> tokenExtraClaim = new HashMap<>(); //crear token con el usuario
+            HashMap<String, Object> tokenExtraClaim = new HashMap<>(); //crear un objeto de tipo HashMap
             tokenExtraClaim.put("sub", rq.getEmailUsuario());//agregar el email del usuario al token
-            String token = jwtService.generateToken(tokenExtraClaim, userDetails);
+            String token = jwtService.generateToken(tokenExtraClaim, userDetails);// generar el token segun el email del usuario
             System.out.println("Token generado: " + token);
-            return AuthResponse.builder().token(token).build();//crear la respuesta con el token
+            return AuthResponse.builder().token(token).build();//crear la respuesta con el token y retornarla
         } catch (Exception e) {
             throw new RuntimeException("Usuario o contraseña incorrectos");
         }
     }
 
     public AuthResponse register(RegisterRequest rq) {
-        Usuario usuario = Usuario.builder()// mediante el patron builder se crea un usuario con la informacion del request
-                .nombreUsuario(rq.getNombreUsuario())
-                .apellidoUsuario(rq.getApellidoUsuario())
-                .emailUsuario(rq.getEmailUsuario())
-                .cedulaUsuario(rq.getCedulaUsuario())
-                .estaturaUsuario(rq.getEstaturaUsuario())
-                .pesoUsuario(rq.getPesoUsuario())
-                .nivelActualUsuario(rq.getNivelActualUsuario())
-                .fechaNacimiento(rq.getFechaNacimiento())
-                .horasRecompensas(rq.getHorasRecompensas())
-                .numeroFicha(rq.getNumeroFicha())
-                .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaUsuario()))//codificar la contraseña
-                .idRol(Rol.builder().idRol(3).build())//po defecto se asigna el rol de usuario
-                .build();
-        userRepository.save(usuario);//guardar el usuario en la base de datos
-        //crear token con el usuario creado y retornar la respuesta
-        return AuthResponse.builder().token(jwtService.createToken(usuario)).build();
+
+//        Aprendiz aprendiz = new Aprendiz();
+//        aprendiz.setIdentificacion(rq.getIdentificacion());
+//        aprendiz.setNombres(rq.getNombres());
+//        aprendiz.setApellidos(rq.getApellidos());
+//        aprendiz.setTelefono(rq.getTelefono());
+//        aprendiz.setFechaNacimiento(rq.getFechaNacimiento());
+//        aprendiz.setFicha(rq.getFicha());
+//        aprendiz.setJornada(rq.getJornada());
+//        aprendiz.setFotoPerfil(rq.getFotoPerfil());
+//
+//        personaRepository.save(aprendiz);//guardar el aprendiz en la base de datos
+//
+//        Usuario usuario = Usuario.builder()// mediante el patron builder se crea un usuario con la informacion del request
+//                .nombreUsuario(rq.getNombreUsuario())
+//                .emailUsuario(rq.getEmailUsuario())
+//                .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaUsuario()))//codificar la contraseña
+//                .idRol(Rol.builder().idRol(3).build())//por defecto se asigna el rol de usuario
+//                .idPersona(aprendiz)
+//                .build();
+//        userRepository.save(usuario);//guardar el usuario en la base de datos
+//        //crear token con el usuario creado y retornar la respuesta
+//        return AuthResponse.builder().token(jwtService.createToken(usuario)).build();
+        return null;
     }
 
     public Usuario getUsuarioActual(String email) {

@@ -1,17 +1,10 @@
 package com.gym.gym_ver2.domain.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Date;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,35 +13,43 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@PrimaryKeyJoinColumn(name = "id_persona")
 @Table(name = "usuario", uniqueConstraints = { @UniqueConstraint(columnNames = "email_usuario"),  @UniqueConstraint(columnNames = "contrasena_usuario")})
-public class Usuario implements UserDetails {
+public class Usuario extends Persona implements UserDetails  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Integer idUsuario;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id_usuario")
+//    private Integer idUsuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol", nullable = false)
     private Rol idRol;
 
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", nullable = false)
+//    private Integer idPersona;
+
     @Column(name="nombre_usuario")
     private String nombreUsuario;
-
-    @Column(name="apellido_usuario")
-    private String apellidoUsuario;
-
-    @Column(name="cedula_usuario")
-    private String cedulaUsuario;
-
-    @Column(name="fecha_nacimineto")
-    private Date fechaNacimiento;
 
     @Column(name = "contrasena_usuario")
     private String contrasenaUsuario;
 
     @Column(name = "email_usuario")
     private String emailUsuario;
+
+    @Column(name = "estado_usuario")
+    private String estadoUsuario;
+
+    /*
+         @Column(name="apellido_usuario")
+    private String apellidoUsuario;
+
+
+
+    @Column(name="fecha_nacimineto")
+    private Date fechaNacimiento;
 
     @Column(name = "estatura_usuario")
     private Double estaturaUsuario;
@@ -67,6 +68,7 @@ public class Usuario implements UserDetails {
 
     @Column(name = "nivel_actual_usuario")
     private Integer nivelActualUsuario;
+     */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

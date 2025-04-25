@@ -31,9 +31,9 @@ public class UsuarioControler {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/obtenereUsario/{id}")
-    public ResponseEntity<UsuarioDTO> obtenerUsuario(@PathVariable("id") Integer idUsuario) {
+    public ResponseEntity<UsuarioDTO> obtenerUsuario(@PathVariable("id") Integer idPersona) {
         try{
-            UsuarioDTO usuario = userService.getUser(idUsuario);
+            UsuarioDTO usuario = userService.getUser(idPersona);
             if (usuario == null) {
                 return ResponseEntity.notFound().build(); // 404 Not Found si no existe el usuario
             }

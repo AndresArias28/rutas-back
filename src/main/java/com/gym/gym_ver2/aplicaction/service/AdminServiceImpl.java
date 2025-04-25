@@ -33,7 +33,7 @@ public class AdminServiceImpl implements  AdminService {
         List<Usuario> usuariosAdmins = usuarioRepository.findAllByRol(rol);
         return usuariosAdmins.stream()
                 .map(usr -> new AdminDTO(
-                        usr.getIdUsuario(),
+                        usr.getIdPersona(),
                         usr.getNombreUsuario(),
                         usr.getEmailUsuario(),
                         usr.getIdRol().getIdRol()

@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
-import java.util.Date;
+import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,6 +37,7 @@ public class JwtService {
                 .signWith(getKey(), SignatureAlgorithm.HS256) // Firma con clave secreta, añade seguridad
                 .compact(); // Generar el token de tipo String
     }
+    
     // Obtener la clave secreta en formato Key
     public  Key getKey() {
         byte[] secretEncode = Decoders.BASE64.decode(SECRET_KEY); // Decodificar la clave secreta en base64
@@ -45,6 +46,7 @@ public class JwtService {
         }
         return Keys.hmacShaKeyFor(secretEncode);//devuelve una clave secreta
     }
+
     // Validar el token con el usuario y la información adicional
     public boolean validateToken(String token, UserDetails userDetails) {
         try {
