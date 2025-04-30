@@ -1,16 +1,16 @@
 package com.gym.gym_ver2.infraestructure.auth;
 //patrones utilizados: builder, singleton,  inyeccion de dependencias. fachada, observerr, Cadena de Responsabilidad
+
 import com.gym.gym_ver2.aplicaction.service.PasswordResetService;
 import com.gym.gym_ver2.aplicaction.service.UsuarioService;
-//import com.gym.gym_ver2.domain.model.entity.Aprendiz;
 import com.gym.gym_ver2.domain.model.entity.Aprendiz;
-import com.gym.gym_ver2.domain.model.entity.Persona;
 import com.gym.gym_ver2.domain.model.entity.Rol;
 import com.gym.gym_ver2.domain.model.entity.Usuario;
 import com.gym.gym_ver2.infraestructure.config.CustomUserDetailsService;
 import com.gym.gym_ver2.infraestructure.jwt.JwtService;
 import com.gym.gym_ver2.infraestructure.repository.AprendizRepository;
 import com.gym.gym_ver2.infraestructure.repository.PersonaRepository;
+import com.gym.gym_ver2.infraestructure.repository.RolRepository;
 import com.gym.gym_ver2.infraestructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -32,6 +32,7 @@ public class AuthServiceImpl implements  AuthService {
     private final UsuarioRepository userRepository;
     private final AprendizRepository aprendizRepository;
     private final PersonaRepository personaRepository;
+    private final RolRepository rolRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -80,6 +81,13 @@ public class AuthServiceImpl implements  AuthService {
             throw new RuntimeException("El usuario ya existe");
         }
 
+
+
+// 1. Obtener el rol desde la base de datos
+        Rol rol = rolRepository.findById(3)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+        // 2. Crear y guardar al aprendiz (persona concreta)
         Aprendiz aprendiz = Aprendiz.builder()// crear un aprendiz con la informacion del usuario
                 .nombres(rq.getNombres())
                 .apellidos(rq.getApellidos())
@@ -97,9 +105,11 @@ public class AuthServiceImpl implements  AuthService {
                 .build();
         aprendiz = aprendizRepository.save(aprendiz);
 
+
+
         Usuario usuario = Usuario.builder()// mediante el patron builder se crea un usuario con la informacion del request
                 .persona(aprendiz)
-                .idRol(Rol.builder().idRol(3).build())//por defecto se asigna el rol de usuario
+                .idRol(rol)//por defecto se asigna el rol de usuario
                 .nombreUsuario(rq.getNombreUsuario())
                 .emailUsuario(rq.getEmailUsuario())
                 .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaUsuario()))//codificar la contraseña
@@ -107,6 +117,7 @@ public class AuthServiceImpl implements  AuthService {
                 .estado(rq.estado)
                 .build();
         userRepository.save(usuario);//guardar el usuario en la base de datos
+        System.out.println("Rol asignado: " + usuario.getIdRol().getNombreRol());
 
         return AuthResponse.builder().token(jwtService.createToken(usuario)).build();  //crear token con el usuario creado y retornar la respuesta
     }

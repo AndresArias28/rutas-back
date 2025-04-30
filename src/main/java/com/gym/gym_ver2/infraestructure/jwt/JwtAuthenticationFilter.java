@@ -74,7 +74,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         boolean esAdministrador = authorities.stream()
                                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_Administrador"));
                         boolean esUsuario = authorities.stream()
-                                .anyMatch(auth -> auth.getAuthority().equals("ROLE_Usuario"));
+                                .anyMatch(auth -> auth.getAuthority().equals("ROLE_Aprendiz"));
                         boolean esSuperusuario = authorities.stream()
                                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_Superusuario"));
                         // Validar que el usuario tenga el rol usuario para denegarle el permiso

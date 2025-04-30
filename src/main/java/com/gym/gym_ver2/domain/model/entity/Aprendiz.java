@@ -14,14 +14,8 @@ import java.math.BigDecimal;
 @Table(name = "aprendiz")
 @PrimaryKeyJoinColumn(name = "id_persona")
 public class Aprendiz extends Persona {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id_aprendiz")
-//    private Integer idAprendiz;
-
-    @OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
-    private Usuario usuario; // relacion al usuario (para login)
+//    @OneToOne(mappedBy = "persona", cascade = CascadeType.ALL)
+//    private Usuario usuario; // relacion al usuario (para login)
 
     @Column(name = "ficha")
     private Integer ficha;
