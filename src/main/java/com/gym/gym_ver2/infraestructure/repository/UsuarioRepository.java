@@ -19,7 +19,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> findAllByRol(@Param("rol") Rol rol);
 
     @Transactional
-    @Modifying()
-    @Query("update Usuario u set u.nombreUsuario=:nombreUsuario, u.emailUsuario=:emailUsuario where u.idPersona = :idPersona")
-    void updateUser(@Param("idPersona") Integer idPersona, @Param("nombreUsuario") String nombreUsuario, @Param("emailUsuario") String emailUsuario);
+    @Modifying
+    @Query("UPDATE Usuario u SET u.nombreUsuario = :nombreUsuario, u.emailUsuario = :emailUsuario WHERE u.id = :id")
+    void updateUser(@Param("id") Integer id,
+                    @Param("nombreUsuario") String nombreUsuario,
+                    @Param("emailUsuario") String emailUsuario);
+
 }

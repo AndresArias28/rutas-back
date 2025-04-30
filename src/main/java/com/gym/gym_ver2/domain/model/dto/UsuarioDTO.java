@@ -1,5 +1,6 @@
 package com.gym.gym_ver2.domain.model.dto;
 
+import com.gym.gym_ver2.domain.model.entity.Persona;
 import lombok.*;
 
 @Data
@@ -8,7 +9,7 @@ import lombok.*;
 @Builder
 @Getter
 public class UsuarioDTO {
-     private Integer idPersona;
+     private Persona idPersona;
      private String nombreUsuario;
      private String emailUsuario;
      private Integer rol;

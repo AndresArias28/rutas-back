@@ -5,7 +5,6 @@ import com.gym.gym_ver2.domain.model.pojos.UserResponse;
 import com.gym.gym_ver2.domain.model.dto.UsuarioDTO;
 import com.gym.gym_ver2.infraestructure.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +30,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarios.stream()
                 .map(usr -> new UsuarioDTO(
-                        usr.getIdPersona(),
+                        usr.getPersona(),
                         usr.getNombreUsuario(), // Nombre
                         usr.getEmailUsuario(),
                         usr.getIdRol().getIdRol()
@@ -45,7 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .orElse(null);
         assert usuario != null;
         return new UsuarioDTO(
-                usuario.getIdPersona(),
+                usuario.getPersona(),
                 usuario.getNombreUsuario(),
                 usuario.getEmailUsuario(),
                 usuario.getIdRol().getIdRol()
@@ -55,7 +54,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     @Override
     public UserResponse actualizarUsuario(UsuarioDTO userRequest) {
-        Optional<Usuario> usuario = usuarioRepository.findById(userRequest.getIdPersona());
+        Optional<Usuario> usuario = usuarioRepository.findById(userRequest.getIdPersona().getIdPersona());
         if (usuario.isEmpty()) {
             return new UserResponse("Usuario no encontrado");
         }
@@ -65,7 +64,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             return new UserResponse("Datos inválidos: nombre o email vacío");
         }
         usuarioRepository.updateUser(    // Actualizar el usuario -- patron repository
-                userRequest.getIdPersona(),
+                userRequest.getIdPersona().getIdPersona(),
                 userRequest.getNombreUsuario(),
                 userRequest.getEmailUsuario()
         );

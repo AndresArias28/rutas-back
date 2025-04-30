@@ -2,16 +2,18 @@ package com.gym.gym_ver2.domain.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import java.util.Date;
 
-
 @Data
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "persona")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Persona {
+public abstract class Persona {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +35,7 @@ public class Persona {
     @Column(name = "telefono")
     private String telefono;
 
-    @Column(name = "foto_perfil")
-    private String fotoPerfil;
+    @Column(name = "sexo")
+    private String sexo;
+
 }

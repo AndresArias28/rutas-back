@@ -3,11 +3,13 @@ package com.gym.gym_ver2.infraestructure.auth;
 import com.gym.gym_ver2.aplicaction.service.PasswordResetService;
 import com.gym.gym_ver2.aplicaction.service.UsuarioService;
 //import com.gym.gym_ver2.domain.model.entity.Aprendiz;
+import com.gym.gym_ver2.domain.model.entity.Aprendiz;
 import com.gym.gym_ver2.domain.model.entity.Persona;
 import com.gym.gym_ver2.domain.model.entity.Rol;
 import com.gym.gym_ver2.domain.model.entity.Usuario;
 import com.gym.gym_ver2.infraestructure.config.CustomUserDetailsService;
 import com.gym.gym_ver2.infraestructure.jwt.JwtService;
+import com.gym.gym_ver2.infraestructure.repository.AprendizRepository;
 import com.gym.gym_ver2.infraestructure.repository.PersonaRepository;
 import com.gym.gym_ver2.infraestructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import java.util.UUID;
 public class AuthServiceImpl implements  AuthService {
 
     private final UsuarioRepository userRepository;
+    private final AprendizRepository aprendizRepository;
     private final PersonaRepository personaRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -65,30 +68,47 @@ public class AuthServiceImpl implements  AuthService {
     }
 
     public AuthResponse register(RegisterRequest rq) {
+        // Validar que el email y la contraseña no estén vacíos
+        if (rq.getEmailUsuario() == null || rq.getEmailUsuario().isEmpty()) {
+            throw new IllegalArgumentException("El email no puede estar vacío");
+        }
+        if (rq.getContrasenaUsuario() == null || rq.getContrasenaUsuario().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña no puede estar vacía");
+        }
+        // Verificar si el usuario ya existe
+        if (userRepository.findByEmailUsuario(rq.getEmailUsuario()).isPresent()) {
+            throw new RuntimeException("El usuario ya existe");
+        }
 
-//        Aprendiz aprendiz = new Aprendiz();
-//        aprendiz.setIdentificacion(rq.getIdentificacion());
-//        aprendiz.setNombres(rq.getNombres());
-//        aprendiz.setApellidos(rq.getApellidos());
-//        aprendiz.setTelefono(rq.getTelefono());
-//        aprendiz.setFechaNacimiento(rq.getFechaNacimiento());
-//        aprendiz.setFicha(rq.getFicha());
-//        aprendiz.setJornada(rq.getJornada());
-//        aprendiz.setFotoPerfil(rq.getFotoPerfil());
-//
-//        personaRepository.save(aprendiz);//guardar el aprendiz en la base de datos
-//
-//        Usuario usuario = Usuario.builder()// mediante el patron builder se crea un usuario con la informacion del request
-//                .nombreUsuario(rq.getNombreUsuario())
-//                .emailUsuario(rq.getEmailUsuario())
-//                .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaUsuario()))//codificar la contraseña
-//                .idRol(Rol.builder().idRol(3).build())//por defecto se asigna el rol de usuario
-//                .idPersona(aprendiz)
-//                .build();
-//        userRepository.save(usuario);//guardar el usuario en la base de datos
-//        //crear token con el usuario creado y retornar la respuesta
-//        return AuthResponse.builder().token(jwtService.createToken(usuario)).build();
-        return null;
+        Aprendiz aprendiz = Aprendiz.builder()// crear un aprendiz con la informacion del usuario
+                .nombres(rq.getNombres())
+                .apellidos(rq.getApellidos())
+                .identificacion(rq.getIdentificacion())
+                .telefono(rq.getTelefono())
+                .fechaNacimiento(rq.getFechaNacimiento())
+                .sexo(rq.getSexo())
+                .ficha(rq.getFicha())
+                .jornada(rq.getJornada())
+                .estatura(rq.getEstatura())
+                .peso(rq.getPeso())
+                .puntosAcumulados(rq.getPuntosAcumulados())
+                .horasAcumuladas(rq.getHorasAcumuladas())
+                .nivelFisico(rq.getNivelFisico())
+                .build();
+        aprendiz = aprendizRepository.save(aprendiz);
+
+        Usuario usuario = Usuario.builder()// mediante el patron builder se crea un usuario con la informacion del request
+                .persona(aprendiz)
+                .idRol(Rol.builder().idRol(3).build())//por defecto se asigna el rol de usuario
+                .nombreUsuario(rq.getNombreUsuario())
+                .emailUsuario(rq.getEmailUsuario())
+                .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaUsuario()))//codificar la contraseña
+                .fotoPerfil("default.png")//por defecto se asigna una foto de perfil
+                .estado(rq.estado)
+                .build();
+        userRepository.save(usuario);//guardar el usuario en la base de datos
+
+        return AuthResponse.builder().token(jwtService.createToken(usuario)).build();  //crear token con el usuario creado y retornar la respuesta
     }
 
     public Usuario getUsuarioActual(String email) {

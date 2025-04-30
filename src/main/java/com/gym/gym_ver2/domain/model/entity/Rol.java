@@ -20,7 +20,6 @@ public class Rol {
     private String nombreRol;
 
     @OneToMany(fetch =FetchType.EAGER, mappedBy = "idRol" )
-   // @JsonManagedReference
     private List<Usuario> usuarios;
 
     public Rol(String nombreRol) {

@@ -11,19 +11,24 @@ import java.util.Date;
 @AllArgsConstructor
 public class RegisterRequest {
     String nombreUsuario;
+    String emailUsuario;
+    String contrasenaUsuario;
+    String estado;
+    String fotoPerfil;
+
     String apellidos;
     String nombres;
     String telefono;
     String identificacion;
     Date fechaNacimiento;
-    String contrasenaUsuario;
-    String emailUsuario;
+    String sexo;
+
     BigDecimal estatura;
     BigDecimal peso;
     Integer ficha;
     String jornada;
-    String fotoPerfil;
-    String estado;
     Integer horasAcumuladas;
     Integer puntosAcumulados;
+    String nivelFisico;
+
 }

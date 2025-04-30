@@ -2,6 +2,7 @@ package com.gym.gym_ver2.domain.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,26 +10,26 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+//@EqualsAndHashCode(callSuper = true)
 @Entity
-@PrimaryKeyJoinColumn(name = "id_persona")
 @Table(name = "usuario", uniqueConstraints = { @UniqueConstraint(columnNames = "email_usuario"),  @UniqueConstraint(columnNames = "contrasena_usuario")})
-public class Usuario extends Persona implements UserDetails  {
+public class Usuario implements UserDetails  {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id_usuario")
-//    private Integer idUsuario;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol", nullable = false)
     private Rol idRol;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona", nullable = false)
-//    private Integer idPersona;
+    @OneToOne
+    @JoinColumn(name = "id_persona")
+    private Persona persona;
 
     @Column(name="nombre_usuario")
     private String nombreUsuario;
@@ -40,35 +41,10 @@ public class Usuario extends Persona implements UserDetails  {
     private String emailUsuario;
 
     @Column(name = "estado_usuario")
-    private String estadoUsuario;
+    private String estado;
 
-    /*
-         @Column(name="apellido_usuario")
-    private String apellidoUsuario;
-
-
-
-    @Column(name="fecha_nacimineto")
-    private Date fechaNacimiento;
-
-    @Column(name = "estatura_usuario")
-    private Double estaturaUsuario;
-
-    @Column(name = "peso_usuario")
-    private Double pesoUsuario;
-
-    @Column(name = "puntos_acumulados_usuario")
-    private Integer puntosUsuario;
-
-    @Column(name = "numero_ficha_usuario")
-    private Integer numeroFicha;
-
-    @Column(name = "recompensa_horas_usuario")
-    private Integer horasRecompensas;
-
-    @Column(name = "nivel_actual_usuario")
-    private Integer nivelActualUsuario;
-     */
+    @Column(name = "foto_perfil")
+    private String fotoPerfil;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
