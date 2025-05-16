@@ -13,7 +13,6 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-//@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "usuario", uniqueConstraints = { @UniqueConstraint(columnNames = "email_usuario"),  @UniqueConstraint(columnNames = "contrasena_usuario")})
 public class Usuario implements UserDetails  {

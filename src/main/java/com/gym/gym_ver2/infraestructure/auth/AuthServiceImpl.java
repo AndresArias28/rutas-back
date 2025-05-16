@@ -21,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -81,13 +80,11 @@ public class AuthServiceImpl implements  AuthService {
             throw new RuntimeException("El usuario ya existe");
         }
 
-
-
-// 1. Obtener el rol desde la base de datos
+        // obtener el rol desde la base de datos
         Rol rol = rolRepository.findById(3)
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
-        // 2. Crear y guardar al aprendiz (persona concreta)
+        // crear y guardar al aprendiz (persona concreta)
         Aprendiz aprendiz = Aprendiz.builder()// crear un aprendiz con la informacion del usuario
                 .nombres(rq.getNombres())
                 .apellidos(rq.getApellidos())
@@ -104,8 +101,6 @@ public class AuthServiceImpl implements  AuthService {
                 .nivelFisico(rq.getNivelFisico())
                 .build();
         aprendiz = aprendizRepository.save(aprendiz);
-
-
 
         Usuario usuario = Usuario.builder()// mediante el patron builder se crea un usuario con la informacion del request
                 .persona(aprendiz)

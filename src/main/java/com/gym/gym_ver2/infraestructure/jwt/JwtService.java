@@ -1,5 +1,6 @@
 package com.gym.gym_ver2.infraestructure.jwt;
 //patrones: singleton, builder, fachada, estrategy, decorador en .signWith(getKey()
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

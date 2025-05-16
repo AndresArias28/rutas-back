@@ -59,6 +59,7 @@ public class SecurityConfig { //obtener la cadena de filtros
                                     ).permitAll()
                                     .requestMatchers(HttpMethod.PUT).permitAll()
                                     .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                                    .requestMatchers(HttpMethod.POST).permitAll()
                                     .anyRequest().authenticated()
                     )
                     //configurar la sesion para que sea sin estado

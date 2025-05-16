@@ -9,8 +9,6 @@ public interface UsuarioService {
 
     List<UsuarioDTO> getUsers();
 
-
-
     UsuarioDTO getUser(Integer idPersona);
 
     UserResponse actualizarUsuario(UsuarioDTO userRequest);
