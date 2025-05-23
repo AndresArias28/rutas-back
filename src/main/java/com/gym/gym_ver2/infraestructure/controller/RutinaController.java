@@ -5,10 +5,7 @@ import com.gym.gym_ver2.domain.model.dto.RutinaDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/rutina")
 @RestController
@@ -17,13 +14,14 @@ public class RutinaController {
 
     private final RutinaService rutinaService;
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/crear")
     public ResponseEntity<RutinaDTO> crearRutina(@RequestBody RutinaDTO rutinaDTO) {
         try {
             RutinaDTO nuevaRutina = rutinaService.crearRutina(rutinaDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevaRutina);
         } catch (Exception e) {
-            e.printStackTrace();
+             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

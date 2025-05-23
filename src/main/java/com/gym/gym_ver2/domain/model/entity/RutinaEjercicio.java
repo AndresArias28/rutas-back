@@ -1,9 +1,7 @@
 package com.gym.gym_ver2.domain.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -27,9 +25,6 @@ public class RutinaEjercicio {
     @JoinColumn(name = "id_ejercicio", referencedColumnName = "id_ejercicio")
     private Ejercicio idEjercicio;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "dificultad")
-    private Dificultad dificultad;
 
     @Column(name = "repeticiones")
     private Integer repeticiones;
@@ -42,8 +37,5 @@ public class RutinaEjercicio {
 
     @Column(name = "carga")
     private Integer carga;
-
-
-
 
 }

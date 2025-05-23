@@ -3,7 +3,6 @@ package com.gym.gym_ver2.domain.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.util.List;
 
 @Data
@@ -32,14 +31,11 @@ public class Rutina {
     private String fotoRutina;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "dificultad")
+    private Dificultad dificultad;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "enfoque")
     private Enfoque enfoque;
 
-
-
-//    @Column(name = "repeticiones")
-//    private Integer repeticiones;
-//
-//    @Column(name = "series")
-//    private Integer series;
 }
