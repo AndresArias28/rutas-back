@@ -11,7 +11,6 @@ import com.gym.gym_ver2.infraestructure.repository.RutinaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +21,7 @@ public class RutinaServiceImpl implements  RutinaService {
     private final RutinaRepository rutinaRepo;
     private final EjercicioRepository ejercicioRepo;
     private final RutinaEjerciciosRepository rutinaEjercicioRepo;
-
-
+    
     @Override
     @Transactional
     public RutinaDTO crearRutina(RutinaDTO rutinaDTO) {
@@ -34,7 +32,6 @@ public class RutinaServiceImpl implements  RutinaService {
                 .enfoque(rutinaDTO.getEnfoque())
                 .dificultad(rutinaDTO.getDificultad())
                 .build();
-
         Rutina savedRutina = rutinaRepo.save(rutina);
 
         List<RutinaEjercicio> rutinaEjercicios = rutinaDTO.getEjercicios().stream().map(ejDto -> {
@@ -49,7 +46,6 @@ public class RutinaServiceImpl implements  RutinaService {
                     .carga(ejDto.getCarga())
                     .duracion(ejDto.getDuracion())
                     .build();
-
         }).collect(Collectors.toList());
 
         rutinaEjercicioRepo.saveAll(rutinaEjercicios); // guardar todos los enlaces
@@ -61,6 +57,5 @@ public class RutinaServiceImpl implements  RutinaService {
                 .dificultad(Dificultad.valueOf(savedRutina.getDificultad().name()))
                 .build();
     }
-
 
 }

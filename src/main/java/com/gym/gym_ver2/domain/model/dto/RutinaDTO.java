@@ -3,7 +3,6 @@ package com.gym.gym_ver2.domain.model.dto;
 import com.gym.gym_ver2.domain.model.entity.Dificultad;
 import com.gym.gym_ver2.domain.model.entity.Enfoque;
 import lombok.*;
-
 import java.util.List;
 
 @Data
