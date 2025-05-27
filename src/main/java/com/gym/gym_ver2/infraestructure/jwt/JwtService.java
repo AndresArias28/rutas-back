@@ -4,6 +4,7 @@ package com.gym.gym_ver2.infraestructure.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @Service//interfaz que carga los datos específicos del usuario. Servicio que se encarga de la creacion y validacion de los tokens
 public class JwtService {
 
-    private static final String SECRET_KEY = "0rWp3H+rGhqzZ8vFLVUbC6Y1QnA4pRtj/BOwXaFd5Zw=";//singleton que contiene la clave secreta
+    @Autowired private JwtConfig jwtConfig; // Inyección de dependencias para obtener la clave secreta desde la configuración
 
     public String createToken(UserDetails usuario) {
         return generateToken(new HashMap<>(), usuario);
@@ -41,7 +42,7 @@ public class JwtService {
     
     // Obtener la clave secreta en formato Key
     public  Key getKey() {
-        byte[] secretEncode = Decoders.BASE64.decode(SECRET_KEY); // Decodificar la clave secreta en base64
+        byte[] secretEncode = Decoders.BASE64.decode(jwtConfig.getSecretKey()); // Decodificar la clave secreta en base64
         if (secretEncode.length < 32) {
             throw new IllegalArgumentException("La clave secreta debe tener al menos 32 bytes (256 bits) después de decodificarla.");
         }
