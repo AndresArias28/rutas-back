@@ -17,7 +17,16 @@ import java.util.stream.Collectors;
 @Service//interfaz que carga los datos específicos del usuario. Servicio que se encarga de la creacion y validacion de los tokens
 public class JwtService {
 
-    @Autowired private JwtConfig jwtConfig; // Inyección de dependencias para obtener la clave secreta desde la configuración
+//    private final String SECRET_KEY = "VGhpcyBpcyBhIHZhbGlkIHNlY3JldCBrZXkgb24gQmFzZTY0IGZvciBKV1Q=";
+    private final JwtConfig jwtConfig; // Inyección de dependencias para obtener la clave secreta desde la configuración
+
+    public JwtService(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
+    }
+
+    public String getClave() {
+        return jwtConfig.getSecretKey();
+    }
 
     public String createToken(UserDetails usuario) {
         return generateToken(new HashMap<>(), usuario);
@@ -42,7 +51,7 @@ public class JwtService {
     
     // Obtener la clave secreta en formato Key
     public  Key getKey() {
-        byte[] secretEncode = Decoders.BASE64.decode(jwtConfig.getSecretKey()); // Decodificar la clave secreta en base64
+        byte[] secretEncode = Decoders.BASE64.decode(this.getClave()); // Decodificar la clave secreta en base64
         if (secretEncode.length < 32) {
             throw new IllegalArgumentException("La clave secreta debe tener al menos 32 bytes (256 bits) después de decodificarla.");
         }
