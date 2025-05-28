@@ -35,4 +35,4 @@ build/
 # Ignorar configuración local de Spring Boot
 src/main/resources/application.properties
 
-,env
+.env
