@@ -1,7 +1,7 @@
 package com.gym.gym_ver2.aplicaction.service;
 
 import com.gym.gym_ver2.domain.model.entity.Persona;
-import com.gym.gym_ver2.domain.model.entity.PersonaNatural;
+
 import com.gym.gym_ver2.domain.model.entity.Usuario;
 import com.gym.gym_ver2.domain.model.pojos.UserResponse;
 import com.gym.gym_ver2.domain.model.dto.UsuarioDTO;
@@ -34,34 +34,34 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarios.stream()
                 .map(usr -> {
                     Persona persona = usr.getPersona();
-                    if (persona instanceof PersonaNatural personaNatural) {
+
                         return new UsuarioDTO(
-                                personaNatural.getNombres(),
-                                personaNatural.getApellidos(),
+                                persona.getNombres(),
+                                persona.getApellidos(),
                                 usr.getNombreUsuario(),
                                 usr.getEmailUsuario(),
                                 usr.getIdRol().getIdRol()
                         );
-                    } else {
-                        throw new IllegalStateException("Tipo de persona no soportado");
-                    }
+
                 })
                 .toList();
     }
 
     @Override
-    public UsuarioDTO getUser(Integer idPersona) {
-//        Usuario usuario = usuarioRepository.findById(idPersona)
-//                .orElse(null);
-//        assert usuario != null;
-//        return new UsuarioDTO(
-//                usuario.getPersona(),
-//                usuario.getNombreUsuario(),
-//                usuario.getEmailUsuario(),
-//                usuario.getIdRol().getIdRol()
-//        );
-        return  null;
+    public UsuarioDTO getUser(Integer idUsuario) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElse(null);
+        assert usuario != null;
+        return new UsuarioDTO(
+                usuario.getNombreUsuario(),
+                usuario.getEmailUsuario(),
+                usuario.getPersona().getNombres(),
+                usuario.getPersona().getIdentificacion(),
+                usuario.getIdRol().getIdRol()
+
+        );
     }
+
 
     @Transactional
     @Override

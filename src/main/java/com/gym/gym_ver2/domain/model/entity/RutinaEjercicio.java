@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "rutinasejercicios")
+@Table(name = "rutina_ejercicio")
 public class RutinaEjercicio {
 
     @Id
@@ -25,6 +25,8 @@ public class RutinaEjercicio {
     @JoinColumn(name = "id_ejercicio", referencedColumnName = "id_ejercicio")
     private Ejercicio idEjercicio;
 
+    @OneToMany(mappedBy = "idRutinaEjercicio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<DesafioRealizado> desafioRealizados;
 
     @Column(name = "repeticiones")
     private Integer repeticiones;
