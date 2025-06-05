@@ -19,14 +19,14 @@ public class RutinaEjercicio {
 
     @ManyToOne(fetch = FetchType.EAGER )
     @JoinColumn(name = "id_rutina", referencedColumnName = "id_rutina")
-    private Rutina idRutina;
+    private Rutina rutina;
 
     @ManyToOne(fetch =  FetchType.EAGER )
     @JoinColumn(name = "id_ejercicio", referencedColumnName = "id_ejercicio")
-    private Ejercicio idEjercicio;
+    private Ejercicio ejercicio;
 
-    @OneToMany(mappedBy = "idRutinaEjercicio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<DesafioRealizado> desafioRealizados;
+    @OneToMany(mappedBy = "rutinaEjercicio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<DesafioRealizado> desafiosRzados;
 
     @Column(name = "repeticiones")
     private Integer repeticiones;

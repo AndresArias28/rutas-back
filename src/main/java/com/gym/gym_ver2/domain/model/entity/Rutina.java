@@ -18,8 +18,11 @@ public class Rutina {
     @Column(name = "id_rutina")
     private Integer idRutina;
 
-    @OneToMany(mappedBy = "idRutina", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "rutina", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RutinaEjercicio> rutinaEjercicios;
+
+    @OneToMany(mappedBy = "rutina", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Desafio> desafios;
 
     @Column(name = "nombre_rutina")
     private String nombre;
@@ -37,5 +40,7 @@ public class Rutina {
     @Enumerated(EnumType.STRING)
     @Column(name = "enfoque")
     private Enfoque enfoque;
+
+
 
 }

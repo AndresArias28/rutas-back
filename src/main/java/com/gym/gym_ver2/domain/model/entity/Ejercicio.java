@@ -19,7 +19,7 @@ public class Ejercicio {
     @Column(name = "id_ejercicio")
     private Integer idEjercicio;
 
-    @OneToMany(mappedBy = "idEjercicio", fetch =  FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ejercicio", fetch =  FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RutinaEjercicio> rutinaEjercicios;
 
     @Column(name = "nombre_ejercicio")

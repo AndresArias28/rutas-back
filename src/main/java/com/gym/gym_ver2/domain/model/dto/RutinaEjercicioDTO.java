@@ -10,10 +10,10 @@ import lombok.*;
 public class RutinaEjercicioDTO {
 
     private Dificultad dificultad; // puede ser ENUM en backend también
-    private int series;
-    private int repeticion;
-    private int carga;
-    private int duracion;
-    private int idEjercicio;
+    private Integer series;
+    private Integer repeticion;
+    private Integer carga;
+    private Integer duracion;
+    private Integer idEjercicio;
 
 }

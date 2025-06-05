@@ -26,7 +26,7 @@ public class Usuario implements UserDetails  {
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol", nullable = false)
     private Rol idRol;
 
-    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DesafioRealizado> desafioRealizados;
 
     @OneToOne

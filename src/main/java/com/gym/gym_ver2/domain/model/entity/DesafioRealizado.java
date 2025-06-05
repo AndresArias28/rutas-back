@@ -22,15 +22,15 @@ public class DesafioRealizado {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_desafio", referencedColumnName = "id_desafio")
-    private Desafio idDesafio;
+    private Desafio desafio;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
-    private Usuario idUsuario;
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rutina_ejercicio", referencedColumnName = "id_rutina_ejercicio")
-    private RutinaEjercicio idRutinaEjercicio;
+    private RutinaEjercicio rutinaEjercicio;
 
     @Column(name = "fecha_inicio_desafio")
     private LocalDateTime inicioDesafio;

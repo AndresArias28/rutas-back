@@ -22,7 +22,10 @@ public class Desafio {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rutina", referencedColumnName = "id_rutina")
-    private Rutina idRutina;
+    private Rutina rutina;
+
+    @OneToMany(mappedBy = "desafio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<DesafioRealizado> desafiosUsuarios;
 
     @Column(name = "descripcion_desafio")
     private String descripcionDesafio;
@@ -32,9 +35,5 @@ public class Desafio {
 
     @Column(name = "foto_desafio")
     private String fotoDesafio;
-
-    @OneToMany(mappedBy = "idDesafio", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<DesafioRealizado> desafioRealizados;
-
 
 }
