@@ -17,7 +17,7 @@ public class RutinaEjercicio {
     @Column(name = "id_rutina_ejercicio")
     private Integer idRutinaEjercicio;
 
-    @ManyToOne(fetch = FetchType.EAGER )
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "id_rutina", referencedColumnName = "id_rutina")
     private Rutina rutina;
 

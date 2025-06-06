@@ -10,4 +10,8 @@ public interface RutinaService {
     RutinaDTO crearRutina(RutinaDTO rutinaDTO);
 
     List<RutinaDTO> obtenerRutinas();
+
+    void eliminarRutina(Integer id);
+
+    RutinaDTO actualizarRutina(Integer id, RutinaDTO rutinaDTO);
 }

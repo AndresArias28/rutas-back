@@ -11,13 +11,14 @@ import java.util.List;
 @Builder
 @Getter
 public class RutinaDTO {
+    private Integer idRutina;
     private String nombre;
     private String descripcion;
     private String fotoRutina;
     private Enfoque enfoque;
     private Dificultad dificultad;
     private List<EjercicioDTO> ejercicios;
-    private List<DesafioDTO> desafios;
+
 
     @Data
     @Builder
@@ -28,7 +29,7 @@ public class RutinaDTO {
         private String fotoEjercicio;
         private String musculos;
         private Integer series;
-        private Integer repeticiones;
+        private Integer repeticion;
         private Integer carga;
         private Integer duracion;
     }

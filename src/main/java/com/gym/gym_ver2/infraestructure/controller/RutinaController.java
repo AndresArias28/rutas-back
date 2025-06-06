@@ -39,4 +39,32 @@ public class RutinaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @DeleteMapping("/eliminarRutinas/{id}")
+    public ResponseEntity<?> eliminarRutina(@PathVariable Integer id) {
+        try {
+            rutinaService.eliminarRutina(id);
+            return ResponseEntity.ok("✅ Rutina eliminada exitosamente.");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("❌ en controller Rutina no encontrada con ID: " + id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("❌ Error al eliminar la rutina.");
+        }
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<RutinaDTO> actualizarRutina(@PathVariable Integer id, @RequestBody RutinaDTO rutinaDTO) {
+        try {
+            RutinaDTO rutinaActualizada = rutinaService.actualizarRutina(id, rutinaDTO);
+            return ResponseEntity.ok(rutinaActualizada);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
