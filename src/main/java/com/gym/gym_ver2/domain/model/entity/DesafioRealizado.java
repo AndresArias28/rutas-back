@@ -28,18 +28,13 @@ public class DesafioRealizado {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_rutina_ejercicio", referencedColumnName = "id_rutina_ejercicio")
-    private RutinaEjercicio rutinaEjercicio;
+    @OneToMany(mappedBy = "desafioRealizado", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<RutinaRealizada> rutinasRealizadas;
 
     @Column(name = "fecha_inicio_desafio")
     private LocalDateTime inicioDesafio;
 
-    @Column(name = "fecha_fin_desafio")
-    private LocalDateTime finDesafio;
-
     @Column(name = "estado")
     private String estado;
-
 
 }

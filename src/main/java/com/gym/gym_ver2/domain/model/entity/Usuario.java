@@ -48,6 +48,12 @@ public class Usuario implements UserDetails  {
     @Column(name = "foto_perfil")
     private String fotoPerfil;
 
+    @Column(name = "puntos_acumulados")
+    private Integer puntosAcumulados;
+
+    @Column(name = "horas_acumuladas")
+    private Integer horasAcumuladas;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return idRol != null

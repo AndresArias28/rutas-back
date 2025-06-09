@@ -17,12 +17,12 @@ public class RutinaDTO {
     private String fotoRutina;
     private Enfoque enfoque;
     private Dificultad dificultad;
-    private List<EjercicioDTO> ejercicios;
-
+    private Integer puntuajeRutina;
+    private List<RutinaEjercicioDTO> ejercicios;
 
     @Data
     @Builder
-    public static class EjercicioDTO {
+    public static class RutinaEjercicioDTO {
         private Integer idEjercicio;
         private String nombre;
         private String descripcion;
@@ -32,6 +32,9 @@ public class RutinaDTO {
         private Integer repeticion;
         private Integer carga;
         private Integer duracion;
+        private Integer calorias;
+        private Integer orden;
+        private Integer tiempoDescanso;
     }
 
 }

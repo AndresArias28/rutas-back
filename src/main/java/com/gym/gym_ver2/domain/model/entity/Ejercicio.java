@@ -34,4 +34,7 @@ public class Ejercicio {
     @Column(name = "musculos")
     private String musculos;
 
+    @Column(name = "met", nullable = false, precision = 1)
+    private Double met;
+
 }
