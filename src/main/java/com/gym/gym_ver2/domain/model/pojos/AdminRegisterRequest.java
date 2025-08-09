@@ -15,7 +15,6 @@ public class AdminRegisterRequest {
     private String nombreUsuario;
     private String apellidoUsuario;
     private String cedulaUsuario;
-    private Date fechaNacimiento;
     private String contrasenaUsuario;
     private String emailUsuario;
 

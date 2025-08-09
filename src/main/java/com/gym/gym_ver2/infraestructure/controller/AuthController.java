@@ -27,7 +27,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> registerUsers(@RequestBody RegisterRequest rq) {
-
         return ResponseEntity.ok(authService.register(rq));
     }
 
@@ -39,11 +38,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.forgotPassword(request.getEmailUsuario()));
     }
 
-    @PutMapping("/reset-password")
-    public ResponseEntity<String> resetPassword( @RequestBody Map<String, String> request) {
-        String token = request.get("token");
-        String newPassword = request.get("password");
-        return ResponseEntity.ok(authService.recoverPassword(newPassword, token));
-    }
+//    @PutMapping("/reset-password")
+//    public ResponseEntity<String> resetPassword( @RequestBody Map<String, String> request) {
+//        String token = request.get("token");
+//        String newPassword = request.get("password");
+//        return ResponseEntity.ok(authService.recoverPassword(newPassword, token));
+//    }
 
 }

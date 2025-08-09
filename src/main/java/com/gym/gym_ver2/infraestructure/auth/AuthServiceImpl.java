@@ -3,13 +3,12 @@ package com.gym.gym_ver2.infraestructure.auth;
 
 import com.gym.gym_ver2.aplicaction.service.PasswordResetService;
 import com.gym.gym_ver2.aplicaction.service.UsuarioService;
-import com.gym.gym_ver2.domain.model.entity.Aprendiz;
+
 import com.gym.gym_ver2.domain.model.entity.Rol;
 import com.gym.gym_ver2.domain.model.entity.Usuario;
 import com.gym.gym_ver2.infraestructure.config.CustomUserDetailsService;
 import com.gym.gym_ver2.infraestructure.jwt.JwtService;
-import com.gym.gym_ver2.infraestructure.repository.AprendizRepository;
-import com.gym.gym_ver2.infraestructure.repository.PersonaRepository;
+
 import com.gym.gym_ver2.infraestructure.repository.RolRepository;
 import com.gym.gym_ver2.infraestructure.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +28,14 @@ import java.util.UUID;
 public class AuthServiceImpl implements  AuthService {
 
     private final UsuarioRepository userRepository;
-    private final AprendizRepository aprendizRepository;
-    private final PersonaRepository personaRepository;
+//    private final AprendizRepository aprendizRepository;
+//    private final PersonaRepository personaRepository;
     private final RolRepository rolRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final PasswordResetService passwordResetService;
-    private final UsuarioService usuarioService;
+//    private final UsuarioService usuarioService;
     private final JavaMailSender mailSender;
     private final UserDetailsService userDetailsService;
     private  final CustomUserDetailsService customUserDetailsService;
@@ -82,37 +81,17 @@ public class AuthServiceImpl implements  AuthService {
         }
 
         // obtener el rol de aprendiz  desde la base de datos
-        Rol rol = rolRepository.findById(3)
+        Rol rol = rolRepository.findById(2)
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
-        // crear y guardar al aprendiz (persona concreta)
-        Aprendiz aprendiz = Aprendiz.builder()// crear un aprendiz con la informacion del usuario
-                .nombres(rq.getNombres())
-                .apellidos(rq.getApellidos())
-                .identificacion(rq.getIdentificacion())
-                .telefono(rq.getTelefono())
-                .fechaNacimiento(rq.getFechaNacimiento())
-                .sexo(rq.getSexo())
-                .ficha(rq.getFicha())
-                .jornada(rq.getJornada())
-                .estatura(rq.getEstatura())
-                .peso(rq.getPeso())
-                .nivelFisico(rq.getNivelFisico())
-                .build();
-
-        // Guardar el aprendiz en la base de datos
-        aprendiz = aprendizRepository.save(aprendiz);
-
         Usuario usuario = Usuario.builder()// mediante el patron builder se crea un usuario con la informacion del request
-                .persona(aprendiz)
                 .idRol(rol)//por defecto se asigna el rol de usuario
                 .nombreUsuario(rq.getNombreUsuario())
                 .emailUsuario(rq.getEmailUsuario())
+                .apellidos(rq.getApellidos())
+                .nombres(rq.getNombres())
+                .identificacion(rq.getIdentificacion())
                 .contrasenaUsuario(passwordEncoder.encode(rq.getContrasenaUsuario()))//codificar la contraseña
-                .fotoPerfil("default.png")//por defecto se asigna una foto de perfil
-                .estado(rq.estado)
-                .puntosAcumulados(0) // Inicializar puntos acumulados en 0
-                .horasAcumuladas(0) // Inicializar horas acumuladas en 0
                 .build();
 
         //guardar el usuario en la base de datos
@@ -121,6 +100,7 @@ public class AuthServiceImpl implements  AuthService {
 
         return AuthResponse.builder().token(jwtService.createToken(usuario)).build();  //crear token con el usuario creado y retornar la respuesta
     }
+
 
     public Usuario getUsuarioActual(String email) {
         return userRepository.findByEmailUsuario(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -146,11 +126,6 @@ public class AuthServiceImpl implements  AuthService {
         mailSender.send(message);
     }
 
-    @Override
-    public String recoverPassword(String newPassword, String token) {
-        String email = passwordResetService.validatePasswordResetToken(token);
-        usuarioService.updatePassword(email, newPassword);
-        return "Contraseña actualizada correctamente";
-    }
+
 
 }

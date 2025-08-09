@@ -26,13 +26,6 @@ public class Usuario implements UserDetails  {
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol", nullable = false)
     private Rol idRol;
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DesafioRealizado> desafioRealizados;
-
-    @OneToOne
-    @JoinColumn(name = "id_persona")
-    private Persona persona;
-
     @Column(name="nombre_usuario")
     private String nombreUsuario;
 
@@ -42,17 +35,14 @@ public class Usuario implements UserDetails  {
     @Column(name = "email_usuario")
     private String emailUsuario;
 
-    @Column(name = "estado_usuario")
-    private String estado;
+    @Column(name = "nombres")
+    private String nombres;
 
-    @Column(name = "foto_perfil")
-    private String fotoPerfil;
+    @Column(name = "apellidos")
+    private String apellidos;
 
-    @Column(name = "puntos_acumulados")
-    private Integer puntosAcumulados;
-
-    @Column(name = "horas_acumuladas")
-    private Integer horasAcumuladas;
+    @Column(name = "identificacion", unique = true)
+    private String identificacion;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

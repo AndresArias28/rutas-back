@@ -7,5 +7,5 @@ public interface AuthService  {
 
     String forgotPassword(String email);
 
-    String recoverPassword(String newPassword, String token);
+//    String recoverPassword(String newPassword, String token);
 }
