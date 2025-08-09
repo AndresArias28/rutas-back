@@ -42,6 +42,7 @@ public class JwtService {
         return Jwts.builder()// Construir el token mediante la librería Jwts
                 .setClaims(extraClaims) // Información adicional, correo
                 .claim("rol", roles) // Agregar los roles del usuario
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis())) // Fecha de emisión
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24)) // Expira en 24 minutos
                 .signWith(getKey(), SignatureAlgorithm.HS256) // Firma con clave secreta, añade seguridad
