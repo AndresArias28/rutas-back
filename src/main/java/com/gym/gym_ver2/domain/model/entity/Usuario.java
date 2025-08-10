@@ -6,6 +6,8 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,6 +28,26 @@ public class Usuario implements UserDetails  {
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol", nullable = false)
     private Rol idRol;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ruta> rutas;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recorrido> recorridos;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PuntosHistorial> puntosHistorial;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Oauth_cuentas> oauthCuentas;
+
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_recompensa",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_recompensa")
+    )
+    private List<Recompensa> recompensas = new ArrayList<Recompensa>();
+
     @Column(name="nombre_usuario")
     private String nombreUsuario;
 
@@ -43,6 +65,15 @@ public class Usuario implements UserDetails  {
 
     @Column(name = "identificacion", unique = true)
     private String identificacion;
+
+    @Column(name = "puntos")
+    private Integer puntos;
+
+    @Column(name = "metodo_autenticacion")
+    private String metodoAutenticacion; // "LOCAL" o "OAUTH2"
+
+    @Column(name = "nivel_actividad")
+    private Integer nivelActividad;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
