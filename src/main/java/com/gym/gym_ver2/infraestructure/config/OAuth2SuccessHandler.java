@@ -1,7 +1,7 @@
 package com.gym.gym_ver2.infraestructure.config;
 
+import com.gym.gym_ver2.aplicaction.service.UsuarioService;
 import com.gym.gym_ver2.infraestructure.jwt.JwtService;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,25 +15,19 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import static org.hibernate.engine.config.spi.StandardConverters.asString;
 
 @Component
 public class OAuth2SuccessHandler implements   org.springframework.security.web.authentication.AuthenticationSuccessHandler {
 
     private final JwtService jwtService;
+    private final UsuarioService userService;
 
     @Value("${app.oauth2.redirect-url:http://localhost:5173/login/success}")
     private String redirectUrl;
 
-    public OAuth2SuccessHandler(JwtService jwtService) {
+    public OAuth2SuccessHandler(JwtService jwtService, UsuarioService userService) {
         this.jwtService = jwtService;
-    }
-
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response, FilterChain chain,
-                                        Authentication authentication) throws IOException, ServletException {
-
+        this.userService = userService;
     }
 
     @Override
@@ -41,7 +35,7 @@ public class OAuth2SuccessHandler implements   org.springframework.security.web.
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        // 1) Obtener datos del usuario (tolerando OIDC y OAuth2)
+        // 1) obtener datos del usuario (tolerando OIDC y OAuth2)
         String email = null;
         String name  = null;
         Object principal = authentication.getPrincipal();
@@ -58,10 +52,9 @@ public class OAuth2SuccessHandler implements   org.springframework.security.web.
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No se pudo obtener el email del proveedor OAuth2");
             return;
         }
-        // TODO: upsert en tu BD (usuarios / oauth_cuentas)
-        // userService.upsertFromGoogle(email, name, principal.getSubject(), principal.getPicture());
+       userService.upsertFromGoogle(email, name);
 
-        // Construye un UserDetails mínimo para firmar el JWT
+        // 2) Crear un token JWT para el usuario
         UserDetails usuario = org.springframework.security.core.userdetails.User
                 .withUsername(email)
                 .password("N/A")
@@ -72,11 +65,9 @@ public class OAuth2SuccessHandler implements   org.springframework.security.web.
 
         String next = redirectUrl + "?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
 
-
-        // Opción rápida (para pruebas): redirigir con token en query
         response.sendRedirect(next);
-
     }
+
     private static String asString(Object o) {
         return (o == null) ? null : String.valueOf(o);
     }
